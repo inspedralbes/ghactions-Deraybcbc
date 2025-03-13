@@ -1,9 +1,6 @@
-name: Deploy to Production
-
-on:
-  push:
-    branches:
-      - main
+name: Preparando para subir a produccion
+run-name: ${{ github.actor }} esta subiendo la aplicacion a PROD
+on: [push]
 
 jobs:
   deploy:
