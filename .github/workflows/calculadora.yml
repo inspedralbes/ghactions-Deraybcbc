@@ -38,11 +38,6 @@ jobs:
             -i ~/prod_key.pem ./dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/web/a22kevburcac.daw.inspedralbes.cat/public_html/action2/
           rm ~/prod_key.pem
 
-      - name: Establecer permisos
-        run: |
-          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-            -i ~/prod_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "chmod -R 755 ~/web/a22kevburcac.daw.inspedralbes.cat/public_html/action2"
 
       - name: Fi del procés
         run: echo "🎉 Desplegament completat a action1!"
