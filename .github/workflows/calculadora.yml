@@ -1,0 +1,50 @@
+name: Desplegar Vue App a action1
+run-name: ${{ github.actor }} està pujant la seva App Vue a action1 🚀
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar el repositori
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm i
+
+      - name: Construir la aplicación
+        run: npm run build
+
+      - name: Verificar contenido build
+        run: ls -la dist
+
+      - name: Crear clave SSH
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/prod_key.pem
+          chmod 600 ~/prod_key.pem
+
+
+      - name: Enviar archivos al servidor
+        run: |
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            -i ~/prod_key.pem ./calculadora/dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/web/a22kevburcac.daw.inspedralbes.cat/public_html/action2/
+          rm ~/prod_key.pem
+
+      - name: Establecer permisos
+        run: |
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            -i ~/prod_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "chmod -R 755 ~/web/a22kevburcac.daw.inspedralbes.cat/public_html/action2"
+
+      - name: Fi del procés
+        run: echo "🎉 Desplegament completat a action1!"
