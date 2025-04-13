@@ -22,7 +22,7 @@ jobs:
           chmod 600 ~/prod_key.pem
           # Corregimos el comando scp para especificar correctamente el directorio web
           scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-            -i ~/prod_key.pem ./web/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/public_html/actions1/
+            -i ~/prod_key.pem ./web/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/public_html/action1/
           rm ~/prod_key.pem
 
       - name: Fi del procés
