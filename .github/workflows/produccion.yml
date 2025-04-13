@@ -1,20 +1,28 @@
-name: Preparando para subir a produccion
-run-name: ${{ github.actor }} esta subiendo la aplicacion a PROD
-on: [push]
+name: Desplegar HTML a /actions1
+run-name: ${{ github.actor }} està pujant el seu HTML a /actions1 🚀
+
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Clonar el repositori
         uses: actions/checkout@v4
 
-      - name: Deploy with SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            git pull origin main
-            docker-compose up -d --build
+      - name: Verificar contingut local
+        run: ls -la
+
+      - name: Enviar fitxers al servidor
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/prod_key.pem
+          chmod 600 ~/prod_key.pem
+          scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            -i ~/prod_key.pem ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/actions1
+          rm ~/prod_key.pem
+
+      - name: Fi del procés
+        run: echo "🎉 Desplegament completat a /actions1!"
