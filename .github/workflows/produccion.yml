@@ -1,5 +1,5 @@
 name: Desplegar HTML a /actions1
-run-name: ${{ github.actor }} està pujant HTML a actions1 🚀
+run-name: ${{ github.actor }} està pujant el seu HTML a /actions1 🚀
 
 on:
   push:
@@ -13,19 +13,16 @@ jobs:
       - name: Clonar el repositori
         uses: actions/checkout@v4
 
-      - name: Crear carpeta al servidor si no existeix
+      - name: Verificar contingut local
+        run: ls -la
+
+      - name: Enviar fitxers al servidor
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/prod_key.pem
           chmod 600 ~/prod_key.pem
-          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-            -i ~/prod_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "mkdir -p /web/${{ secrets.SSH_HOST }} /public_html/actions1"
-
-      - name: Enviar fitxers HTML al servidor
-        run: |
           scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-            -i ~/prod_key.pem ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/web/${{ secrets.SSH_HOST }} o/public_html/actions1
+            -i ~/prod_key.pem ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/public_html/actions1
           rm ~/prod_key.pem
 
-      - name: Finalització
-        run: echo "🎉 HTML desplegat correctament a /actions1!"
+      - name: Fi del procés
+        run: echo "🎉 Desplegament completat a /actions1!"
