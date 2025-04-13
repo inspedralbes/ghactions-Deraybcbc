@@ -21,7 +21,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/prod_key.pem
           chmod 600 ~/prod_key.pem
           scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-            -i ~/prod_key.pem ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/actions1
+            -i ~/prod_key.pem ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/public_html/actions1
           rm ~/prod_key.pem
 
       - name: Fi del procés
